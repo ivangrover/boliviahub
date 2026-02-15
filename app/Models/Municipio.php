@@ -11,7 +11,7 @@ class Municipio extends Model
 
     protected $table = 'municipios';
 
-    protected $fillable = ['nombre_interno', 'nombre_publico', 'slug', 'provincia_id'];
+    protected $fillable = ['id', 'nombre_interno', 'nombre_publico', 'slug', 'provincia_id'];
 
     public function provincia()
     {

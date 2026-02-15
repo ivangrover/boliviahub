@@ -9,9 +9,13 @@ class ShowMunicipioCompanies extends Component
     public $municipio;
     public $search = '';
 
-    public function mount($slug)
+    public function mount($departamento_slug, $slug)
     {
-        $this->municipio = \App\Models\Municipio::where('slug', $slug)->firstOrFail();
+        $this->municipio = \App\Models\Municipio::where('slug', $slug)
+            ->whereHas('provincia.departamento', function ($q) use ($departamento_slug) {
+                $q->where('slug', $departamento_slug);
+            })
+            ->firstOrFail();
     }
 
     public function render()

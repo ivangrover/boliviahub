@@ -68,7 +68,7 @@
                                             <div>
                                                 <span
                                                     class="block text-xs font-medium text-slate-500 uppercase">Municipio</span>
-                                                <a href="{{ route('municipio.show', $company->direccion->municipio->slug) }}"
+                                                <a href="{{ route('municipio.show', ['departamento_slug' => $company->direccion->municipio->provincia->departamento->slug, 'slug' => $company->direccion->municipio->slug]) }}"
                                                     class="text-base text-indigo-600 hover:text-indigo-700 hover:underline font-medium">
                                                     {{ $company->direccion->municipio->nombre_interno }}
                                                 </a>

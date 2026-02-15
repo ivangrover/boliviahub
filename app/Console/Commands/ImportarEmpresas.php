@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Illuminate\Support\Str;
+
 use App\Models\{Empresa, Direccion, Municipio, Provincia, Departamento, Rubro, Contacto, DescripcionContacto};
 
 class ImportarEmpresas extends Command
@@ -56,6 +56,17 @@ class ImportarEmpresas extends Command
                         'estado_actualizacion' => $empresa['codEstadoActualizacion']['nombre'],
                     ]);
                 }
+                $this->info('[skip] ' . $empresa['razonSocial'] . ': Matrícula no renovada');
+                continue;
+            }
+
+            if ($empresa['estado'] === 'CANCELADO' || $empresa['estado'] === 'INACTIVO' || $empresa['estado'] === 'CREADO') {
+                if ($e = Empresa::find($empresaId)) {
+                    $e->update([
+                        'estado' => $empresa['estado'],
+                    ]);
+                }
+                $this->info('[skip] ' . $empresa['razonSocial'] . ': Estado ' . $empresa['estado']);
                 continue;
             }
 
@@ -85,15 +96,11 @@ class ImportarEmpresas extends Command
 
             // Provincia
             if (!empty($d['direccion']['codProvincia'])) {
-                if ($d['direccion']['codProvincia']['nombre'] == 'CERCADO (COCHABAMBA)') {
-                    $d['direccion']['codProvincia']['nombre'] = 'CERCADO';
-                }
-
                 $prov = Provincia::updateOrCreate(
                     ['id' => $d['direccion']['codProvincia']['id']],
                     [
                         'nombre_interno' => $d['direccion']['codProvincia']['nombre'],
-                        'slug' => Str::slug($d['direccion']['codDepartamento']['nombre'] . '-' . $d['direccion']['codProvincia']['nombre']),
+                        'slug' => Str::slug($d['direccion']['codProvincia']['nombre'] . '-' . substr(md5($d['direccion']['codDepartamento']['nombre']), 0, 3)),
                         'departamento_id' => $dep->id
                     ]
                 );
@@ -108,7 +115,7 @@ class ImportarEmpresas extends Command
                         'nombre_externo' => Str::title(
                             mb_strtolower($d['direccion']['codMunicipio']['nombre'], 'UTF-8')
                         ),
-                        'slug' => Str::slug($d['direccion']['codProvincia']['nombre'] . '-' . $d['direccion']['codMunicipio']['nombre']),
+                        'slug' => Str::slug($d['direccion']['codMunicipio']['nombre'] . '-' . substr(md5($d['direccion']['codProvincia']['nombre']), 0, 3)),
                         'provincia_id' => $prov->id
                     ]
                 );
@@ -174,7 +181,7 @@ class ImportarEmpresas extends Command
                         }
                     }
                 }
-                $this->info("Empresa importada: {$emp->razon_social}");
+                $this->info("[ok] {$emp->razon_social}");
             }
             sleep(10);
         }

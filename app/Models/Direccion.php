@@ -12,6 +12,7 @@ class Direccion extends Model
     protected $table = 'direcciones';
 
     protected $fillable = [
+        'id',
         'nombre_via',
         'numero_domicilio',
         'edificio',

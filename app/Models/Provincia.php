@@ -11,7 +11,7 @@ class Provincia extends Model
 
     protected $table = 'provincias';
 
-    protected $fillable = ['nombre_interno', 'nombre_publico', 'slug', 'departamento_id'];
+    protected $fillable = ['id', 'nombre_interno', 'nombre_publico', 'slug', 'departamento_id'];
 
     public function departamento()
     {

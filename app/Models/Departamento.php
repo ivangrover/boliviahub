@@ -11,7 +11,7 @@ class Departamento extends Model
 
     protected $table = 'departamentos';
 
-    protected $fillable = ['nombre_interno', 'nombre_publico', 'slug'];
+    protected $fillable = ['id', 'nombre_interno', 'nombre_publico', 'slug'];
 
     public function provincias()
     {
