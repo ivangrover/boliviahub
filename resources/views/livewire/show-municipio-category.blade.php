@@ -3,7 +3,7 @@
         <div class="mb-8 flex flex-col sm:flex-row justify-between items-center">
             <div>
                 <nav class="flex mb-2 text-sm text-slate-500">
-                    <a href="{{ route('municipio.show', $municipio->slug) }}"
+                    <a href="{{ route('municipio.show', ['departamento_slug' => $municipio->provincia->departamento->slug, 'slug' => $municipio->slug]) }}"
                         class="hover:text-indigo-600 transition-colors flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

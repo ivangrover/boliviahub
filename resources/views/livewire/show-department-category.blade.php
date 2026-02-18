@@ -59,7 +59,7 @@
                                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
                                     @if($company->direccion && $company->direccion->municipio)
-                                        <a href="{{ route('municipio.show', $company->direccion->municipio->slug) }}"
+                                        <a href="{{ route('municipio.show', ['departamento_slug' => $company->direccion->municipio->provincia->departamento->slug, 'slug' => $company->direccion->municipio->slug]) }}"
                                             class="hover:text-indigo-600 hover:underline transition-colors block truncate">
                                             {{ $company->direccion->municipio->nombre_interno }}
                                         </a>
