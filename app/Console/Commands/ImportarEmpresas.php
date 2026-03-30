@@ -100,6 +100,9 @@ class ImportarEmpresas extends Command
                     ['id' => $d['direccion']['codProvincia']['id']],
                     [
                         'nombre_interno' => $d['direccion']['codProvincia']['nombre'],
+                        'nombre_externo' => Str::title(
+                            mb_strtolower($d['direccion']['codProvincia']['nombre'], 'UTF-8')
+                        ),
                         'slug' => Str::slug($d['direccion']['codProvincia']['nombre'] . '-' . substr(md5($d['direccion']['codDepartamento']['nombre']), 0, 3)),
                         'departamento_id' => $dep->id
                     ]
@@ -156,10 +159,16 @@ class ImportarEmpresas extends Command
                 );
 
                 // Rubros
-                $emp->rubros()->delete();
-                foreach ($d['objetos_sociales'] as $obj) {
-                    $emp->rubros()->create(['descripcion' => $obj['objetoSocial']]);
-                }
+                $nuevosRubros = collect($d['objetos_sociales'])
+                    ->pluck('objetoSocial')->filter()->unique()->values();
+
+                $emp->rubros()->whereNotIn('descripcion', $nuevosRubros)->delete();
+
+                $rubros = $emp->rubros()->pluck('descripcion');
+
+                $nuevosRubros->diff($rubros)->each(function ($descripcion) use ($emp) {
+                    $emp->rubros()->create(['descripcion' => $descripcion]);
+                });
 
                 // Contactos
                 $emp->contactos()->delete();
@@ -181,7 +190,8 @@ class ImportarEmpresas extends Command
                         }
                     }
                 }
-                $this->info("[ok] {$emp->razon_social}");
+
+                $this->info("[ok] ({$emp->id}) {$emp->razon_social}");
             }
             sleep(10);
         }
