@@ -35,7 +35,7 @@ class ShowDepartmentCategory extends Component
         return view('livewire.show-department-category', [
             'companies' => $companies
         ])->layout('layouts.site', [
-                    'title' => $this->category->nombre . ' en ' . $this->department->nombre_publico ?? $this->department->nombre_interno
+                    'title' => $this->category->nombre . ' en ' . ($this->department->nombre_publico ?? $this->department->nombre_interno)
                 ]);
     }
 }

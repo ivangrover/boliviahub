@@ -35,7 +35,7 @@ class ShowMunicipioCategory extends Component
         return view('livewire.show-municipio-category', [
             'companies' => $companies
         ])->layout('layouts.site', [
-                    'title' => $this->category->nombre . ' en ' . $this->municipio->nombre_publico ?? $this->municipio->nombre_interno
+                    'title' => $this->category->nombre . ' en ' . ($this->municipio->nombre_publico ?? $this->municipio->nombre_interno)
                 ]);
     }
 }

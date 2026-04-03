@@ -54,7 +54,7 @@ class ShowMunicipioCompanies extends Component
             'companies' => $companies,
             'categories' => $categories
         ])->layout('layouts.site', [
-                    'title' => 'Empresas en el municipio de ' . $this->municipio->nombre_publico ?? $this->municipio->nombre_interno
+                    'title' => 'Empresas en el municipio de ' . ($this->municipio->nombre_publico ?? $this->municipio->nombre_interno)
                 ]);
     }
 }

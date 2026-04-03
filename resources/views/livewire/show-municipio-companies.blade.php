@@ -15,7 +15,6 @@
                     <li>
                         <a href="{{ route('department.show', $municipio->provincia->departamento->slug) }}"
                             class="text-slate-400 hover:text-slate-500 text-sm font-medium">
-                            Departamento de
                             {{ $municipio->provincia->departamento->nombre_publico ?? $municipio->provincia->departamento->nombre_interno }}
                         </a>
                     </li>
@@ -27,8 +26,8 @@
                                     d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span class="ml-4 text-sm font-medium text-slate-500">Municipio de
-                                {{ $municipio->nombre_publico ?? $municipio->nombre_interno }}</span>
+                            <span
+                                class="ml-4 text-sm font-medium text-slate-500">{{ $municipio->nombre_publico ?? $municipio->nombre_interno }}</span>
                         </div>
                     </li>
                 </ol>

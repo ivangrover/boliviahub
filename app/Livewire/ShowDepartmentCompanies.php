@@ -61,7 +61,7 @@ class ShowDepartmentCompanies extends Component
             'categories' => $categories,
             'municipios' => $municipios
         ])->layout('layouts.site', [
-                    'title' => 'Empresas en el Departamento de ' . $this->department->nombre_publico ?? $this->department->nombre_interno
+                    'title' => 'Empresas en el Departamento de ' . ($this->department->nombre_publico ?? $this->department->nombre_interno)
                 ]);
     }
 }

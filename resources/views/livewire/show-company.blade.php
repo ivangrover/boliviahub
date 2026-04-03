@@ -11,8 +11,16 @@
             @if($company->direccion && $company->direccion->municipio && $company->direccion->municipio->provincia && $company->direccion->municipio->provincia->departamento)
                 <a href="{{ route('department.show', $company->direccion->municipio->provincia->departamento->slug) }}"
                     class="hover:text-indigo-600 transition-colors">
-                    Departamento de
                     {{ $company->direccion->municipio->provincia->departamento->nombre_publico ?? $company->direccion->municipio->provincia->departamento->nombre_interno }}
+                </a>
+                <svg class="h-5 w-5 mx-2 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                <a href="{{ route('municipio.show', ['departamento_slug' => $company->direccion->municipio->provincia->departamento->slug, 'slug' => $company->direccion->municipio->slug]) }}"
+                    class="hover:text-indigo-600 transition-colors">
+                    {{ $company->direccion->municipio->nombre_publico ?? $company->direccion->municipio->nombre_interno }}
                 </a>
                 <svg class="h-5 w-5 mx-2 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
@@ -132,13 +140,15 @@
                                         <dt class="text-xs font-medium text-slate-500 uppercase">Número de
                                             identificación tributaria (NIT)</dt>
                                         <dd class="text-base font-mono font-medium text-slate-900 mt-0.5">
-                                            {{ $company->nit ?? 'N/A' }}</dd>
+                                            {{ $company->nit ?? 'N/A' }}
+                                        </dd>
                                     </div>
                                     <div>
                                         <dt class="text-xs font-medium text-slate-500 uppercase">Matrícula de Comercio
                                         </dt>
                                         <dd class="text-base font-mono text-slate-900 mt-0.5">
-                                            {{ $company->matricula ?? 'N/A' }}</dd>
+                                            {{ $company->matricula ?? 'N/A' }}
+                                        </dd>
                                     </div>
                                 </dl>
                             </div>
@@ -188,14 +198,11 @@
                                         </svg>
                                         Actividades / Rubros
                                     </h3>
-                                    <div class="flex flex-wrap gap-2">
-                                        @foreach($company->rubros as $rubro)
-                                            <span
-                                                class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                                {{ $rubro->descripcion_publico ?? $rubro->descripcion }}
-                                            </span>
-                                        @endforeach
-                                    </div>
+                                    @foreach($company->rubros as $rubro)
+                                        <div class="p-4 rounded-lg text-sm bg-slate-100 text-slate-700 border border-slate-200">
+                                            {!! $rubro->descripcion_publico ?? $rubro->descripcion !!}
+                                        </div>
+                                    @endforeach
                                 </div>
                             @endif
 

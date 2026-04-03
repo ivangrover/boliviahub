@@ -131,7 +131,7 @@
 
         @if(empty($search) && empty($selectedDepartment))
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-slate-900">Explora Empresas por Departamento</h2>
+                <h2 class="text-2xl font-bold text-slate-900">Explora Empresas de Bolivia por Departamento</h2>
             </div>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
