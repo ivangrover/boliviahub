@@ -10,10 +10,10 @@ class ShowDepartmentCategory extends Component
     public $category;
     public $search = '';
 
-    public function mount($dept_slug, $cat_slug)
+    public function mount($departamento_slug, $slug)
     {
-        $this->department = \App\Models\Departamento::where('slug', $dept_slug)->firstOrFail();
-        $this->category = \App\Models\Categoria::where('slug', $cat_slug)->where('estado', 1)->firstOrFail();
+        $this->department = \App\Models\Departamento::where('slug', $departamento_slug)->firstOrFail();
+        $this->category = \App\Models\Categoria::where('slug', $slug)->where('estado', 1)->firstOrFail();
     }
 
     public function render()

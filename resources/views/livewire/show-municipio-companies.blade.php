@@ -64,7 +64,7 @@
                 <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Empresas por Categoría</h2>
                 <div class="flex flex-wrap gap-2">
                     @foreach($categories as $category)
-                        <a href="{{ route('municipio.category.show', ['muni_slug' => $municipio->slug, 'cat_slug' => $category->slug]) }}"
+                        <a href="{{ route('municipio.category.show', ['departamento_slug' => $municipio->provincia->departamento->slug, 'municipio_slug' => $municipio->slug, 'slug' => $category->slug]) }}"
                             class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200 transition-colors duration-200 shadow-sm">
                             {{ $category->nombre }}
                         </a>

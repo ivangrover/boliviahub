@@ -38,6 +38,7 @@
                                 @foreach($departamentos as $dept)
                                     <option value="{{ $dept->id }}">{{ $dept->nombre_publico ?? $dept->nombre_interno }}
                                     </option>
+
                                 @endforeach
                             </select>
                         </div>
@@ -131,7 +132,7 @@
 
         @if(empty($search) && empty($selectedDepartment))
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-slate-900">Explora Empresas de Bolivia por Departamento</h2>
+                <h2 class="text-3xl font-bold text-slate-900">Explora Empresas de Bolivia por Departamento</h2>
             </div>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -149,17 +150,70 @@
                                 {{ $dept->nombre_publico ?? $dept->nombre_interno }}
                             </h3>
                             <div
-                                class="flex items-center text-sm text-slate-500 group-hover:text-indigo-500 transition-colors font-medium">
-                                <span>Empresas en el departamento de {{ $dept->nombre_publico ?? $dept->nombre_interno }}</span>
-                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
+                                class="flex items-center text-md text-slate-500 group-hover:text-indigo-500 transition-colors font-medium">
+                                <span>{{ number_format($empresasCountPerDept[$dept->id] ?? 0) }} empresas en el departamento de
+                                    {{ $dept->nombre_publico ?? $dept->nombre_interno }}</span>
                             </div>
                         </div>
                     </a>
                 @endforeach
+            </div>
+
+            <!-- About Section -->
+            <div class="mt-20 bg-white rounded-2xl p-8 lg:p-12 shadow-sm border border-slate-200 overflow-hidden relative">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 relative z-10">
+                    <div class="lg:col-span-5 flex flex-col justify-center">
+                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-3xl mb-6 leading-tight">
+                            El directorio empresarial <span class="text-indigo-600">más completo de Bolivia</span>
+                        </h2>
+                        <div class="space-y-4 text-md text-slate-600 leading-relaxed">
+                            <p>
+                                <strong class="font-semibold text-slate-900">BoliviaHub</strong> nació con el objetivo
+                                de centralizar a todas las empresas registradas en Bolivia y hacerlas
+                                accesibles para cualquier persona o negocio que necesite encontrar proveedores, socios o
+                                simplemente conocer el ecosistema empresarial del país.
+                            </p>
+                            <p>
+                                Con más de <strong class="font-semibold text-slate-900">40 000 empresas</strong>
+                                en los 9 departamentos del país. Somos la
+                                referencia para quienes buscan conectar con negocios bolivianos de todos los sectores:
+                                construcción, transporte, comercio, manufactura, tecnología, turismo y mucho más.
+                            </p>
+                            <p>
+                                Tanto si eres emprendedor, comprador corporativo, inversor extranjero o simplemente quieres
+                                conocer qué empresas operan en tu región, BoliviaHub te da la información que necesitas
+                                en segundos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                        <!-- Feature 1 -->
+                        <div
+                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">9 departamentos, 300+ municipios</h3>
+                            <p class="text-sm text-slate-600">Cobertura total del territorio boliviano con empresas de todas
+                                las regiones.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div
+                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Empresas S.R.L., S.A., Unipersonales y más
+                            </h3>
+                            <p class="text-sm text-slate-600">Todos los tipos de sociedades bolivianas registradas y
+                                categorizadas.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div
+                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Búsqueda por rubro y ubicación</h3>
+                            <p class="text-sm text-slate-600">Filtra empresas por sector económico y encuentra proveedores
+                                cerca de ti.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     </div>

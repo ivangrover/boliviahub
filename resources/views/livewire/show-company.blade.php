@@ -221,7 +221,8 @@
                                         @foreach($company->categorias as $categoria)
                                             <span
                                                 class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors cursor-default border border-indigo-100">
-                                                {{ $categoria->nombre }}
+                                                <a
+                                                    href="{{ route('department.category.show', ['departamento_slug' => $company->direccion->municipio->provincia->departamento->slug, 'slug' => $categoria->slug]) }}">{{ $categoria->nombre }}</a>
                                             </span>
                                         @endforeach
                                     </div>

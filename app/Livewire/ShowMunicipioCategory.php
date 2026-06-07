@@ -10,10 +10,14 @@ class ShowMunicipioCategory extends Component
     public $category;
     public $search = '';
 
-    public function mount($muni_slug, $cat_slug)
+    public function mount($departamento_slug, $municipio_slug, $slug)
     {
-        $this->municipio = \App\Models\Municipio::where('slug', $muni_slug)->firstOrFail();
-        $this->category = \App\Models\Categoria::where('slug', $cat_slug)->where('estado', 1)->firstOrFail();
+        $this->municipio = \App\Models\Municipio::where('slug', $municipio_slug)
+            ->whereHas('provincia.departamento', function ($q) use ($departamento_slug) {
+                $q->where('slug', $departamento_slug);
+            })
+            ->firstOrFail();
+        $this->category = \App\Models\Categoria::where('slug', $slug)->where('estado', 1)->firstOrFail();
     }
 
     public function render()

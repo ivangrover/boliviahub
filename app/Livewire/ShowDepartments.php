@@ -53,9 +53,22 @@ class ShowDepartments extends Component
                 ->get();
         }
 
+        $empresasCountPerDept = \Illuminate\Support\Facades\Cache::remember('empresas_count_per_dept', 3600, function () {
+            return \Illuminate\Support\Facades\DB::table('empresas')
+                ->join('direcciones', 'empresas.direccion_id', '=', 'direcciones.id')
+                ->join('municipios', 'direcciones.municipio_id', '=', 'municipios.id')
+                ->join('provincias', 'municipios.provincia_id', '=', 'provincias.id')
+                ->where('empresas.estado', 'ACTIVO')
+                ->groupBy('provincias.departamento_id')
+                ->select('provincias.departamento_id', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+                ->pluck('total', 'departamento_id')
+                ->toArray();
+        });
+
         return view('livewire.show-departments', [
             'departamentos' => \App\Models\Departamento::orderBy('nombre_publico')->get(),
-            'companies' => $companies
+            'companies' => $companies,
+            'empresasCountPerDept' => $empresasCountPerDept
         ])->layout('layouts.site', [
                     'title' => 'Empresas en Bolivia'
                 ]);
