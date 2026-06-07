@@ -11,6 +11,13 @@ class ShowDepartments extends Component
     public $selectedMunicipio = '';
     public $municipios = [];
 
+    // Properties for category exploration
+    public $selectedCategory = null;
+    public $selectedDeptForCategory = '';
+    public $selectedMuniForCategory = '';
+    public $municipiosForCategory = [];
+    public $departamentosForCategory = [];
+
     public function updatedSelectedDepartment($value)
     {
         $this->municipios = \App\Models\Municipio::whereHas('provincia.departamento', function ($q) use ($value) {
@@ -18,6 +25,76 @@ class ShowDepartments extends Component
         })->orderBy('nombre_publico')->get();
 
         $this->selectedMunicipio = '';
+    }
+
+    public function selectCategory($categoryId)
+    {
+        $this->selectedCategory = \App\Models\Categoria::find($categoryId);
+        $this->selectedDeptForCategory = '';
+        $this->selectedMuniForCategory = '';
+        $this->municipiosForCategory = [];
+
+        if ($this->selectedCategory) {
+            $this->departamentosForCategory = \App\Models\Departamento::whereHas('provincias.municipios.direcciones.empresas', function ($q) {
+                $q->where('empresas.estado', 'ACTIVO')
+                  ->whereHas('categorias', function ($catQuery) {
+                      $catQuery->where('categorias.id', $this->selectedCategory->id);
+                  });
+            })->orderBy('nombre_publico')->get();
+        } else {
+            $this->departamentosForCategory = [];
+        }
+    }
+
+    public function closeCategoryModal()
+    {
+        $this->selectedCategory = null;
+        $this->selectedDeptForCategory = '';
+        $this->selectedMuniForCategory = '';
+        $this->municipiosForCategory = [];
+        $this->departamentosForCategory = [];
+    }
+
+    public function updatedSelectedDeptForCategory($value)
+    {
+        if ($value && $this->selectedCategory) {
+            $this->municipiosForCategory = \App\Models\Municipio::whereHas('provincia.departamento', function ($q) use ($value) {
+                $q->where('id', $value);
+            })
+            ->whereHas('direcciones.empresas', function ($q) {
+                $q->where('empresas.estado', 'ACTIVO')
+                  ->whereHas('categorias', function ($catQuery) {
+                      $catQuery->where('categorias.id', $this->selectedCategory->id);
+                  });
+            })
+            ->orderBy('nombre_publico')->get();
+        } else {
+            $this->municipiosForCategory = [];
+        }
+        $this->selectedMuniForCategory = '';
+    }
+
+    public function exploreCategory()
+    {
+        if (!$this->selectedCategory || !$this->selectedDeptForCategory) {
+            return;
+        }
+
+        $dept = \App\Models\Departamento::find($this->selectedDeptForCategory);
+
+        if ($this->selectedMuniForCategory) {
+            $muni = \App\Models\Municipio::find($this->selectedMuniForCategory);
+            return redirect()->route('municipio.category.show', [
+                'departamento_slug' => $dept->slug,
+                'municipio_slug' => $muni->slug,
+                'slug' => $this->selectedCategory->slug
+            ]);
+        }
+
+        return redirect()->route('department.category.show', [
+            'departamento_slug' => $dept->slug,
+            'slug' => $this->selectedCategory->slug
+        ]);
     }
 
     public function render()
@@ -65,12 +142,28 @@ class ShowDepartments extends Component
                 ->toArray();
         });
 
+        $totalEmpresas = \Illuminate\Support\Facades\Cache::remember('total_empresas_count', 3600, function () {
+            return \App\Models\Empresa::where('estado', 'ACTIVO')->count();
+        });
+
+        $totalMunicipios = \Illuminate\Support\Facades\Cache::remember('total_municipios_count', 3600, function () {
+            return \App\Models\Municipio::count();
+        });
+
+        $categories = \Illuminate\Support\Facades\Cache::remember('all_categories', 3600, function () {
+            return \App\Models\Categoria::where('estado', 1)->orderBy('nombre')->get();
+        });
+
         return view('livewire.show-departments', [
             'departamentos' => \App\Models\Departamento::orderBy('nombre_publico')->get(),
             'companies' => $companies,
-            'empresasCountPerDept' => $empresasCountPerDept
+            'empresasCountPerDept' => $empresasCountPerDept,
+            'totalEmpresas' => $totalEmpresas,
+            'totalMunicipios' => $totalMunicipios,
+            'categories' => $categories,
         ])->layout('layouts.site', [
-                    'title' => 'Empresas en Bolivia'
+                    'title' => 'BoliviaHub | Directorio de Empresas y Negocios en Bolivia',
+                    'description' => 'Encuentra proveedores, socios estratégicos y empresas en Bolivia. Más de 67.000 negocios registrados por departamento y municipio. Busca gratis en el directorio empresarial más completo del país.'
                 ]);
     }
 }

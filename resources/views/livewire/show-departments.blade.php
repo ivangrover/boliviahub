@@ -7,10 +7,11 @@
         </div>
         <div class="relative max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl text-center mb-6">
-                Empresas <span class="text-indigo-400">en Bolivia</span>
+                Directorio de Empresas <span class="text-indigo-400">en Bolivia</span>
             </h1>
             <p class="mt-4 max-w-2xl text-xl text-slate-300 mx-auto text-center mb-10">
-                Directorio de Negocios de Bolivia. Encuentra proveedores y socios estratégicos en un solo lugar.
+                BoliviaHub es el directorio empresarial más completo de Bolivia. Encuentra proveedores, distribuidores y
+                socios estratégicos entre más de 40.000 empresas registradas en los 9 departamentos del país.
             </p>
 
             <div class="max-w-3xl mx-auto">
@@ -58,6 +59,19 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div
+                    class="mt-6 text-center text-sm sm:text-base text-slate-300 font-medium flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+                    <span>{{ number_format($totalEmpresas, 0, ',', '.') }} empresas registradas</span>
+                    <span class="text-indigo-400 font-bold hidden sm:inline">·</span>
+                    <span>9 departamentos</span>
+                    <span class="text-indigo-400 font-bold hidden sm:inline">·</span>
+                    <span>{{ $totalMunicipios }} municipios cubiertos</span>
+                    <span class="text-indigo-400 font-bold hidden sm:inline">·</span>
+                    <span
+                        class="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-md border border-indigo-500/30 text-xs font-semibold uppercase tracking-wider">100%
+                        gratuito</span>
                 </div>
             </div>
         </div>
@@ -132,7 +146,9 @@
 
         @if(empty($search) && empty($selectedDepartment))
             <div class="mb-8">
-                <h2 class="text-3xl font-bold text-slate-900">Explora Empresas de Bolivia por Departamento</h2>
+                <h2 class="text-3xl font-bold text-slate-900">Explora Empresas de Bolivia por Departamento en Bolivia</h2>
+                <p class="mt-2 text-slate-500">Información actualizada de negocios en los 9 departamentos, desde el
+                    altiplano hasta la Amazonía boliviana.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -159,62 +175,104 @@
                 @endforeach
             </div>
 
-            <!-- About Section -->
-            <div class="mt-20 bg-white rounded-2xl p-8 lg:p-12 shadow-sm border border-slate-200 overflow-hidden relative">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 relative z-10">
-                    <div class="lg:col-span-5 flex flex-col justify-center">
-                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-3xl mb-6 leading-tight">
-                            El directorio empresarial <span class="text-indigo-600">más completo de Bolivia</span>
-                        </h2>
-                        <div class="space-y-4 text-md text-slate-600 leading-relaxed">
-                            <p>
-                                <strong class="font-semibold text-slate-900">BoliviaHub</strong> nació con el objetivo
-                                de centralizar a todas las empresas registradas en Bolivia y hacerlas
-                                accesibles para cualquier persona o negocio que necesite encontrar proveedores, socios o
-                                simplemente conocer el ecosistema empresarial del país.
-                            </p>
-                            <p>
-                                Con más de <strong class="font-semibold text-slate-900">40 000 empresas</strong>
-                                en los 9 departamentos del país. Somos la
-                                referencia para quienes buscan conectar con negocios bolivianos de todos los sectores:
-                                construcción, transporte, comercio, manufactura, tecnología, turismo y mucho más.
-                            </p>
-                            <p>
-                                Tanto si eres emprendedor, comprador corporativo, inversor extranjero o simplemente quieres
-                                conocer qué empresas operan en tu región, BoliviaHub te da la información que necesitas
-                                en segundos.
-                            </p>
-                        </div>
-                    </div>
+            <!-- Rubros Section -->
+            <div class="mt-20">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-900">Encuentra empresas por rubro o sector</h2>
+                    <p class="mt-2 text-slate-500">Desde empresas de construcción y salud hasta tecnología, transporte y
+                        comercio. Explora los sectores más activos de la economía boliviana y encuentra el proveedor o socio
+                        que tu negocio necesita.</p>
+                </div>
 
-                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                        <!-- Feature 1 -->
-                        <div
-                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
-                            <h3 class="text-lg font-bold text-slate-900 mb-2">9 departamentos, 300+ municipios</h3>
-                            <p class="text-sm text-slate-600">Cobertura total del territorio boliviano con empresas de todas
-                                las regiones.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    @foreach($categories as $category)
+                        <button wire:click="selectCategory({{ $category->id }})"
+                            class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/20 text-left transition-all duration-200 group">
+                            <span
+                                class="font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors line-clamp-2 pr-2">
+                                {{ $category->nombre }}
+                            </span>
+                            <span class="text-slate-400 group-hover:text-indigo-500 transition-colors flex-shrink-0">
+                                <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </span>
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Dynamic Category Exploration Modal -->
+            @if($selectedCategory)
+                <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div
+                        class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden transform transition-all duration-300 scale-100 flex flex-col">
+                        <!-- Modal Header -->
+                        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-950">Explorar Rubro</h3>
+                            <button wire:click="closeCategoryModal"
+                                class="text-slate-400 hover:text-slate-600 rounded-lg p-1.5 hover:bg-slate-50 transition-colors">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <!-- Feature 2 -->
-                        <div
-                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
-                            <h3 class="text-lg font-bold text-slate-900 mb-2">Empresas S.R.L., S.A., Unipersonales y más
-                            </h3>
-                            <p class="text-sm text-slate-600">Todos los tipos de sociedades bolivianas registradas y
-                                categorizadas.</p>
+                        <!-- Modal Body -->
+                        <div class="p-6 space-y-4">
+                            <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100/50">
+                                <span class="text-xs font-semibold text-indigo-500 uppercase tracking-wider block mb-1">Rubro
+                                    Seleccionado</span>
+                                <span class="text-lg font-bold text-slate-900">{{ $selectedCategory->nombre }}</span>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">1. Selecciona el
+                                        Departamento</label>
+                                    <select wire:model.live="selectedDeptForCategory"
+                                        class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-slate-700">
+                                        <option value="">-- Elige un Departamento --</option>
+                                        @foreach($departamentosForCategory as $dept)
+                                            <option value="{{ $dept->id }}">{{ $dept->nombre_publico ?? $dept->nombre_interno }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">2. Selecciona el Municipio
+                                        <span class="text-xs text-slate-400 font-normal">(Opcional)</span></label>
+                                    <select wire:model.live="selectedMuniForCategory"
+                                        class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-slate-700 disabled:bg-slate-50 disabled:text-slate-400"
+                                        @if(empty($selectedDeptForCategory)) disabled @endif>
+                                        <option value="">-- Todos los Municipios --</option>
+                                        @foreach($municipiosForCategory as $muni)
+                                            <option value="{{ $muni->id }}">{{ $muni->nombre_publico ?? $muni->nombre_interno }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Feature 3 -->
-                        <div
-                            class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 hover:shadow-md transition-shadow hover:bg-indigo-50 h-full flex flex-col">
-                            <h3 class="text-lg font-bold text-slate-900 mb-2">Búsqueda por rubro y ubicación</h3>
-                            <p class="text-sm text-slate-600">Filtra empresas por sector económico y encuentra proveedores
-                                cerca de ti.</p>
+                        <!-- Modal Footer -->
+                        <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+                            <button wire:click="closeCategoryModal"
+                                class="px-4 py-2 border border-slate-200 bg-white text-slate-700 rounded-lg hover:bg-slate-50 font-semibold text-sm transition-colors shadow-sm">
+                                Cancelar
+                            </button>
+                            <button wire:click="exploreCategory"
+                                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold text-sm transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                @if(empty($selectedDeptForCategory)) disabled @endif>
+                                Explorar
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         @endif
     </div>
 </div>

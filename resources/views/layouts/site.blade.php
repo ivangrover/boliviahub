@@ -8,6 +8,12 @@
 
     <title>{{ $title ?? config('app.name', 'BoliviaHub') }}</title>
 
+    @if(isset($description) && !empty($description))
+        <meta name="description" content="{{ $description }}">
+    @endif
+
+    <link rel="canonical" href="{{ url()->current() }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
