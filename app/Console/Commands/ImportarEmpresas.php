@@ -111,17 +111,22 @@ class ImportarEmpresas extends Command
 
             // Municipio
             if (!empty($d['direccion']['codMunicipio'])) {
-                $mun = Municipio::updateOrCreate(
-                    ['id' => $d['direccion']['codMunicipio']['id']],
-                    [
-                        'nombre_interno' => $d['direccion']['codMunicipio']['nombre'],
-                        'nombre_externo' => Str::title(
-                            mb_strtolower($d['direccion']['codMunicipio']['nombre'], 'UTF-8')
-                        ),
-                        'slug' => Str::slug($d['direccion']['codMunicipio']['nombre'] . '-' . substr(md5($d['direccion']['codProvincia']['nombre']), 0, 3)),
-                        'provincia_id' => $prov->id
-                    ]
-                );
+
+                if ($d['direccion']['codMunicipio']['id'] == 780) {
+                    $mun = Municipio::where('id', 779)->first();
+                } else {
+                    $mun = Municipio::updateOrCreate(
+                        ['id' => $d['direccion']['codMunicipio']['id']],
+                        [
+                            'nombre_interno' => $d['direccion']['codMunicipio']['nombre'],
+                            'nombre_externo' => Str::title(
+                                mb_strtolower($d['direccion']['codMunicipio']['nombre'], 'UTF-8')
+                            ),
+                            'slug' => Str::slug($d['direccion']['codMunicipio']['nombre'] . '-' . substr(md5($d['direccion']['codProvincia']['nombre']), 0, 3)),
+                            'provincia_id' => $prov->id
+                        ]
+                    );
+                }
             }
 
             if (isset($mun)) {
